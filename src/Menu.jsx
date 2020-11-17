@@ -18,7 +18,6 @@ const Menu = () => {
         <div className="container">
             <div className="menu">
                 <h2>Menu</h2>
-
                 <h3 className="menu-group-name">Bar Bites</h3>
                 <div className="menu-group">
                     {menu && menu.map(item => (

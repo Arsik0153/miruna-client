@@ -13,6 +13,8 @@ const Booking = () => {
     const [ tel, setTel ] = useState('');
     const [ tableNumber, setTableNumber ] = useState('');
 
+    const [error, setError] = useState('');
+
     const handleSubmit = (e) => {
         e.preventDefault();
 
@@ -40,7 +42,9 @@ const Booking = () => {
     const nextStep = (step) => {
         if (step === 1) {
             if (tableNumber < 1 || tableNumber > 12) {
+                setError('Table number must be greater than 0 and less than 13');
             } else {
+                setError('');
                 setStep(step);
             }
         }
@@ -66,7 +70,10 @@ const Booking = () => {
                         <img src={tableImg} alt="Tables"/>
                         <input type="number" placeholder="1" min="1" max="12" value={tableNumber}
                                onChange={e => setTableNumber(e.target.value)}/>
-                        <button className="submit" onClick={() => nextStep(1)}>Next</button>
+                        <button className="submit" onClick={(e) => {
+                            e.preventDefault();
+                            nextStep(1);
+                        }}>Next</button>
                     </>
                 )}
                 {step === 1 && (
@@ -88,6 +95,7 @@ const Booking = () => {
                 {step === 2 && (
                     <p className="success">Thanks for booking!</p>
                 )}
+                <p className="error">{error}</p>
             </form>
         </div>
     );
