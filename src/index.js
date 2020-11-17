@@ -4,7 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import axios from 'axios';
-axios.defaults.baseURL = 'http://miruna.herokuapp.com/api/';
+axios.defaults.baseURL = 'https://miruna.herokuapp.com/api/';
 
 ReactDOM.render(
   <React.StrictMode>
