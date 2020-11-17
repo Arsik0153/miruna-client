@@ -8,10 +8,10 @@ const Header = () => {
                     <div className="logo">
                         Miruna
                     </div>
-                    <a href="#" className="nav-item">
+                    <a href="/delivery" className="nav-item">
                         Delivery
                     </a>
-                    <a href="#" className="nav-item">
+                    <a href="/contacts" className="nav-item">
                         Contacts
                     </a>
                 </div>
