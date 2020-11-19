@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
 import tableImg from './img/tables.jpg';
@@ -11,9 +11,22 @@ const Booking = () => {
     const [ lname, setLName ] = useState('');
     const [ email, setEmail ] = useState('');
     const [ tel, setTel ] = useState('');
-    const [ tableNumber, setTableNumber ] = useState('');
+    const [ tableNumber, setTableNumber ] = useState('1');
+    const [ freeTables, setFreeTables ] = useState([]);
 
-    const [error, setError] = useState('');
+    const [ error, setError ] = useState('');
+
+    useEffect(() => {
+        let data = {
+            date_booked_for: startDate
+        };
+        axios.get('tables/free', {
+            params: data
+        })
+            .then(res => {
+                setFreeTables(res.data);
+            });
+    }, [ startDate ]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -25,11 +38,11 @@ const Booking = () => {
             customer_phone_no: tel,
             date_booked: new Date(),
             date_booked_for: startDate,
-            table_number: tableNumber
+            table_number: parseInt(tableNumber)
         };
-
+        console.log(data);
         axios.post('bookings/', data)
-            .then(res => {
+            .then(() => {
                 setStep(2);
             })
             .catch(err => {
@@ -41,7 +54,7 @@ const Booking = () => {
 
     const nextStep = (step) => {
         if (step === 1) {
-            if (tableNumber < 1 || tableNumber > 12) {
+            if (parseInt(tableNumber) < 1 || tableNumber > 12) {
                 setError('Table number must be greater than 0 and less than 13');
             } else {
                 setError('');
@@ -68,12 +81,17 @@ const Booking = () => {
                         />
                         <label>Select table</label>
                         <img src={tableImg} alt="Tables"/>
-                        <input type="number" placeholder="1" min="1" max="12" value={tableNumber}
-                               onChange={e => setTableNumber(e.target.value)}/>
+                        <select value={tableNumber} onChange={e => setTableNumber(e.target.value)}>
+                            {freeTables &&
+                            freeTables.map((table, idx) => (
+                                <option value={table.t_number} key={idx}>{table.t_number}</option>
+                            ))}
+                        </select>
                         <button className="submit" onClick={(e) => {
                             e.preventDefault();
                             nextStep(1);
-                        }}>Next</button>
+                        }}>Next
+                        </button>
                     </>
                 )}
                 {step === 1 && (
